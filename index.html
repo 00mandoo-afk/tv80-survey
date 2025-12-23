@@ -721,18 +721,17 @@
 
    function updateScale() {
     const pyramidWrapper = document.getElementById('pyramid-zoom-wrapper');
-    pyramidWrapper.style.transform = `scale(${scale})`;
-    
-    // 내부 너비를 scale에 맞게 조정
-    const board = document.querySelector('.board-container');
-    const totalWidth = board.scrollWidth * scale; // 실제 너비 × scale
-    pyramidWrapper.style.width = `${totalWidth}px`;
+    const boardContainer = document.querySelector('.board-container');
+    const originalWidth = boardContainer.scrollWidth; // 원래 너비
+    const scaledWidth = originalWidth * scale; // 확대된 너비
 
-    // 스크롤 영역을 유지
+    pyramidWrapper.style.transform = `scale(${scale})`;
+    pyramidWrapper.style.width = `${scaledWidth}px`;
+
     const wrapper = document.querySelector('.board-wrapper');
     if (wrapper) {
         const maxScroll = wrapper.scrollWidth - wrapper.clientWidth;
-        wrapper.scrollLeft = maxScroll * 0.6; // 기본 위치 유지
+        wrapper.scrollLeft = maxScroll * 0.6;
     }
 }
 
@@ -740,6 +739,7 @@
 </script>
 </body>
 </html>
+
 
 
 
