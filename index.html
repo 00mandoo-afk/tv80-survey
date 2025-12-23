@@ -442,7 +442,7 @@
         {s:"1", n:5}, {s:"2", n:4}, {s:"3", n:3}, {s:"4", n:2}
     ];
     let currentQIdx = 0;
-    let scale = 0.7;
+    let scale = 0.6;
     let lastScale = 1;
     let lastDistance = 0;
     let savedPersonalInfo = {};
@@ -687,7 +687,7 @@
 
     // 확대/축소 버튼
     document.getElementById('zoom-in-btn').addEventListener('click', () => {
-        scale = Math.min(scale + 0.1, 1.5);
+        scale = Math.min(scale + 0.1, 1.1);
         updateScale();
     });
     document.getElementById('zoom-out-btn').addEventListener('click', () => {
@@ -714,7 +714,7 @@
                 e.touches[1].pageY - e.touches[0].pageY
             );
             scale = lastScale * (currentDistance / lastDistance);
-            scale = Math.min(Math.max(scale, 0.6), 1.5);
+            scale = Math.min(Math.max(scale, 0.6), 1.1);
             updateScale();
         }
     }, { passive: false });
@@ -733,6 +733,7 @@
 </script>
 </body>
 </html>
+
 
 
 
