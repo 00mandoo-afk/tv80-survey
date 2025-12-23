@@ -123,11 +123,10 @@
 }
 
 .board-inner {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 0 16px;
-    min-height: min-content; /* 내용물 높이에 맞게 늘어남 */
+    display: block; /* flex 대신 block 추천 */
+    margin: 0 auto;
+    padding: 20px;
+    box-sizing: content-box;
 }
 
         .zoom-control {
@@ -727,30 +726,40 @@
         }
     }, { passive: false });
 
- function updateScale() {
+function updateScale() {
     const pyramidWrapper = document.getElementById('pyramid-zoom-wrapper');
     const boardInner = document.querySelector('.board-inner');
-    
-    // 1. 스케일 적용
+    const boardContainer = document.querySelector('.board-container');
+
+    // 1. 기준점을 왼쪽 위(top left)로 잡아야 왼쪽이 잘리지 않습니다.
+    pyramidWrapper.style.transformOrigin = "top left";
     pyramidWrapper.style.transform = `scale(${scale})`;
 
-    // 2. 확대된 실제 높이만큼 부모(board-inner)의 높이를 강제로 할당
-    // rect.height는 scale이 적용된 후의 실제 시각적 높이를 계산합니다.
-    const rect = pyramidWrapper.getBoundingClientRect();
-    const scaledHeight = rect.height;
-    
-    // 피라미드 아래 숫자와 여백을 위해 넉넉히 높이 설정
-    boardInner.style.height = (scaledHeight + 100) + "px";
-    
-    // 3. 만약 화면 전체가 안 움직인다면 body의 높이 인식 문제일 수 있으므로 
-    // 페이지 하단 푸터와의 간격을 위해 아래 코드 추가
-    pyramidWrapper.style.marginBottom = "20px";
+    // 2. 확대된 실제 너비와 높이를 계산합니다.
+    const scaledWidth = boardContainer.offsetWidth * scale;
+    const scaledHeight = pyramidWrapper.offsetHeight * scale;
+
+    // 3. 부모(board-inner)의 크기를 확대된 크기에 맞게 강제로 키워줍니다.
+    // 이렇게 해야 브라우저가 전체 크기를 인식하고 스크롤바를 만들어줍니다.
+    boardInner.style.width = scaledWidth + "px";
+    boardInner.style.height = (scaledHeight + 120) + "px"; 
+
+    // 4. (중요) 기준점을 left로 바꿔서 한쪽으로 쏠리는 현상을 방지하기 위해 
+    // 여유 공간을 계산하여 중앙 정렬처럼 보이게 만듭니다.
+    const wrapperWidth = document.querySelector('.board-wrapper').clientWidth;
+    if (scaledWidth < wrapperWidth) {
+        boardInner.style.marginLeft = "auto";
+        boardInner.style.marginRight = "auto";
+    } else {
+        boardInner.style.marginLeft = "20px"; // 최소 여백
+    }
 }
 
     init();
 </script>
 </body>
 </html>
+
 
 
 
