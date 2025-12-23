@@ -129,29 +129,24 @@
     box-sizing: content-box;
 }
 
-        .zoom-control {
-            width:100%;
-            max-width:540px;
-            display:flex;
-            align-items:center;
-            justify-content:flex-end;
-            gap:8px;
-            margin-bottom:8px;
-            font-size:12px;
-            color:#666;
-        }
+       .zoom-control {
+    width: 100%;
+    max-width: 600px; /* 너비를 충분히 확보 */
+    display: flex;
+    flex-direction: row !important; /* 무조건 가로로 */
+    justify-content: flex-end;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 10px;
+}
         #zoom-range { width:140px; }
         .zoom-btn { padding:6px 10px; background:#ddd; border:none; border-radius:4px; cursor:pointer; }
 
-     /* 수정된 스타일: 확대 시 왼쪽 잘림 방지 */
-.pyramid-zoom-wrapper {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    transition: transform 0.15s ease;
-    transform-origin: top left; /* 기준점을 왼쪽 위로 변경 */
-    width: fit-content;         /* 내용물에 맞게 너비 조절 */
-    margin: 0 auto;             /* 중앙 정렬 유지 */
+    #pyramid-zoom-wrapper {
+    display: inline-block; /* 내용물 크기만큼만 차지 */
+    transform-origin: top left; /* 왼쪽 잘림 방지의 핵심 */
+    transition: transform 0.1s ease;
+    text-align: center;
 }
         .board-container {
             display: flex;
@@ -192,14 +187,15 @@
         }
 
         .score-label-row {
-            display:flex;
-            justify-content:space-between;
-            width:100%;
-            max-width:540px;
-            margin-top:10px;
-            font-weight:900;
-            font-size:16px;
-        }
+    display: flex;
+    justify-content: space-between;
+    width: 100%; /* 피라미드 너비에 맞춤 */
+    margin-top: 20px;
+    font-weight: 900;
+    font-size: 16px;
+    padding: 0 10px;
+    box-sizing: border-box;
+}
         .score-label-row span { white-space:nowrap; }
         .score-label-row .left { color:var(--disagree-color); }
         .score-label-row .center { color:#7f8c8d; }
@@ -727,31 +723,34 @@
     }, { passive: false });
 
 function updateScale() {
-    const pyramidWrapper = document.getElementById('pyramid-zoom-wrapper');
-    const boardInner = document.querySelector('.board-inner');
+    const wrapper = document.getElementById('pyramid-zoom-wrapper');
+    const inner = document.querySelector('.board-inner');
     const boardContainer = document.querySelector('.board-container');
 
-    // 1. 기준점을 왼쪽 위(top left)로 잡아야 왼쪽이 잘리지 않습니다.
-    pyramidWrapper.style.transformOrigin = "top left";
-    pyramidWrapper.style.transform = `scale(${scale})`;
+    // 1. 왼쪽 기준 확대 (왼쪽 잘림 방지)
+    wrapper.style.transformOrigin = "top left";
+    wrapper.style.transform = `scale(${scale})`;
 
-    // 2. 확대된 실제 너비와 높이를 계산합니다.
-    const scaledWidth = boardContainer.offsetWidth * scale;
-    const scaledHeight = pyramidWrapper.offsetHeight * scale;
+    // 2. 확대된 실제 너비/높이 계산
+    const originalWidth = boardContainer.offsetWidth;
+    const originalHeight = wrapper.offsetHeight;
+    const scaledWidth = originalWidth * scale;
+    const scaledHeight = originalHeight * scale;
 
-    // 3. 부모(board-inner)의 크기를 확대된 크기에 맞게 강제로 키워줍니다.
-    // 이렇게 해야 브라우저가 전체 크기를 인식하고 스크롤바를 만들어줍니다.
-    boardInner.style.width = scaledWidth + "px";
-    boardInner.style.height = (scaledHeight + 120) + "px"; 
+    // 3. 부모 박스(inner)의 크기를 확대된 크기와 일치시킴
+    inner.style.width = scaledWidth + "px";
+    inner.style.height = (scaledHeight + 50) + "px";
 
-    // 4. (중요) 기준점을 left로 바꿔서 한쪽으로 쏠리는 현상을 방지하기 위해 
-    // 여유 공간을 계산하여 중앙 정렬처럼 보이게 만듭니다.
-    const wrapperWidth = document.querySelector('.board-wrapper').clientWidth;
-    if (scaledWidth < wrapperWidth) {
-        boardInner.style.marginLeft = "auto";
-        boardInner.style.marginRight = "auto";
+    // 4. 중앙 정렬 유지 로직
+    // 화면보다 작으면 가운데로, 화면보다 크면 왼쪽 여백 20px 유지
+    const screenWidth = document.querySelector('.board-wrapper').clientWidth;
+    if (scaledWidth < screenWidth) {
+        inner.style.marginLeft = "auto";
+        inner.style.marginRight = "auto";
+        inner.style.left = "0";
     } else {
-        boardInner.style.marginLeft = "20px"; // 최소 여백
+        inner.style.marginLeft = "20px";
+        inner.style.marginRight = "20px";
     }
 }
 
@@ -759,6 +758,7 @@ function updateScale() {
 </script>
 </body>
 </html>
+
 
 
 
