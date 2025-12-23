@@ -111,12 +111,14 @@
             left: 0 !important;
         }
 
-        .board-wrapper {
-            width: 100%;
-            background: white;
-            padding: 30px 0;
-            overflow-x: auto;
-        }
+       .board-wrapper {
+    width: 100%;
+    background: white;
+    padding: 30px 0;
+    overflow-x: scroll;
+    touch-action: pan-x;
+    -webkit-overflow-scrolling: touch;
+}
         .board-inner {
             display: flex;
             flex-direction: column;
@@ -138,13 +140,13 @@
         #zoom-range { width:140px; }
         .zoom-btn { padding:6px 10px; background:#ddd; border:none; border-radius:4px; cursor:pointer; }
 
-       #pyramid-zoom-wrapper {
+       .pyramid-zoom-wrapper {
     display: flex;
     flex-direction: column;
     align-items: center;
     transition: transform 0.15s ease;
     transform-origin: top center;
-    width: auto; /* width를 auto로 해서 실제 컨텐츠 크기에 맞게 확장 */
+    width: auto;
 }
         .board-container {
             display: flex;
@@ -719,11 +721,11 @@
         }
     }, { passive: false });
 
-   function updateScale() {
+  function updateScale() {
     const pyramidWrapper = document.getElementById('pyramid-zoom-wrapper');
     const boardContainer = document.querySelector('.board-container');
-    const originalWidth = boardContainer.scrollWidth; // 원래 너비
-    const scaledWidth = originalWidth * scale; // 확대된 너비
+    const originalWidth = boardContainer.scrollWidth;
+    const scaledWidth = originalWidth * scale;
 
     pyramidWrapper.style.transform = `scale(${scale})`;
     pyramidWrapper.style.width = `${scaledWidth}px`;
@@ -739,6 +741,7 @@
 </script>
 </body>
 </html>
+
 
 
 
