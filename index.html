@@ -140,13 +140,15 @@
         #zoom-range { width:140px; }
         .zoom-btn { padding:6px 10px; background:#ddd; border:none; border-radius:4px; cursor:pointer; }
 
-       .pyramid-zoom-wrapper {
+     /* 수정된 스타일: 확대 시 왼쪽 잘림 방지 */
+.pyramid-zoom-wrapper {
     display: flex;
     flex-direction: column;
     align-items: center;
     transition: transform 0.15s ease;
-    transform-origin: top center;
-    width: auto;
+    transform-origin: top left; /* 기준점을 왼쪽 위로 변경 */
+    width: fit-content;         /* 내용물에 맞게 너비 조절 */
+    margin: 0 auto;             /* 중앙 정렬 유지 */
 }
         .board-container {
             display: flex;
@@ -721,19 +723,24 @@
         }
     }, { passive: false });
 
-  function updateScale() {
+ // 수정된 함수: 스크롤 위치와 레이아웃 보정
+function updateScale() {
     const pyramidWrapper = document.getElementById('pyramid-zoom-wrapper');
     const boardContainer = document.querySelector('.board-container');
-    const originalWidth = boardContainer.scrollWidth;
-    const scaledWidth = originalWidth * scale;
-
-    pyramidWrapper.style.transform = `scale(${scale})`;
-    pyramidWrapper.style.width = `${scaledWidth}px`;
-
     const wrapper = document.querySelector('.board-wrapper');
-    if (wrapper) {
-        const maxScroll = wrapper.scrollWidth - wrapper.clientWidth;
-        wrapper.scrollLeft = maxScroll * 0.6;
+    
+    // 1. 스케일 적용
+    pyramidWrapper.style.transform = `scale(${scale})`;
+    
+    // 2. 확대된 실제 너비를 계산하여 wrapper에 반영 (스크롤바 생성 위함)
+    const originalWidth = boardContainer.offsetWidth; 
+    pyramidWrapper.style.width = (originalWidth * scale) + "px";
+    pyramidWrapper.style.height = (pyramidWrapper.offsetHeight * scale) + "px";
+
+    // 3. 처음 로드하거나 확대 시 중립(0) 위치가 가급적 중앙에 오도록 초기 스크롤 조정
+    if (wrapper && scale > 0.6) {
+        const centerOffset = (pyramidWrapper.offsetWidth - wrapper.clientWidth) / 2;
+        wrapper.scrollLeft = centerOffset;
     }
 }
 
@@ -741,6 +748,7 @@
 </script>
 </body>
 </html>
+
 
 
 
