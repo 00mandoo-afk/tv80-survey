@@ -601,7 +601,7 @@
 
     function showFinalForm() {
         const container = document.getElementById('reason-container');
-        const mapping = {"-4": "절대 비동의", "4": "매우 동의"};
+        const mapping = {"-4": "매우 비동의", "4": "매우 동의"};
         Object.keys(mapping).forEach(score => {
             document.querySelectorAll(`.column[data-score="${score}"] .q-card`).forEach(card => {
                 let div = container.querySelector(`.reason-box[data-q="${card.textContent}"]`);
@@ -757,6 +757,7 @@ function updateScale() {
 </script>
 </body>
 </html>
+
 
 
 
