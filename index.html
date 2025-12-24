@@ -159,12 +159,23 @@
             align-items: flex-end;
             justify-content: center;
         }
-        .column {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-            align-items: center;
-        }
+     column {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    align-items: center;
+}
+
+/* 숫자를 맨 위에 배치 */
+.score-box {
+    order: -1;              /* 위로 */
+    text-align: center;
+    width: 68px;
+    margin-bottom: 4px;
+    font-weight: bold;
+    font-size: 16px;
+    color: var(--primary-color);
+}
         .slot {
             width: 68px;
             height: 68px;
@@ -352,16 +363,16 @@
             </div>
 
             <div id="pyramid-zoom-wrapper">
-                <div class="board-container" id="board"></div>
-                <div class="score-label-row">
-                    <span class="left">◀ 매우 비동의</span>
-                    <span class="center">중립</span>
-                    <span class="right">매우 동의 ▶</span>
-                </div>
-            </div>
-        </div>
+    <!-- ① 라벨을 위로 올림 -->
+    <div class="score-label-row">
+        <span class="left">◀ 매우 비동의</span>
+        <span class="center">중립</span>
+        <span class="right">매우 동의 ▶</span>
     </div>
 
+    <!-- ② 피라미드 보드 -->
+    <div class="board-container" id="board"></div>
+</div>
     <div class="footer">
         <button id="finish-btn" disabled onclick="goFinalPage()">모든 문항을 배치해 주세요</button>
     </div>
@@ -828,3 +839,4 @@ document.getElementById('prev-btn').addEventListener('click', () => {
 </script>
 </body>
 </html>
+
