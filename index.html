@@ -153,12 +153,25 @@
             transition: transform 0.1s ease;
             text-align: center;
         }
-        .board-container {
-            display: flex;
-            gap: 4px;
-            align-items: flex-end;
-            justify-content: center;
-        }
+    /* 피라미드 전체를 위아래로 뒤집기 */
+.board-container {
+    display: flex;
+    gap: 4px;
+    align-items: flex-end;
+    justify-content: center;
+    transform: scaleY(-1);          /* ★ 상하 반전 */
+}
+
+/* 슬롯 안의 내용(카드)은 다시 뒤집어서 정상 방향으로 보이게 */
+.slot {
+    width: 68px;
+    height: 68px;
+    border: 2px dashed #bdc3c7;
+    border-radius: 10px;
+    background: #fafafa;
+    position: relative;
+    transform: scaleY(-1);          /* ★ 다시 뒤집기 */
+}
      column {
     display: flex;
     flex-direction: column;
@@ -839,4 +852,5 @@ document.getElementById('prev-btn').addEventListener('click', () => {
 </script>
 </body>
 </html>
+
 
