@@ -153,35 +153,23 @@
             transition: transform 0.1s ease;
             text-align: center;
         }
-    /* 피라미드 전체를 위아래로 뒤집기 */
-.board-container {
+board-container {
     display: flex;
     gap: 4px;
     align-items: flex-end;
     justify-content: center;
-    transform: scaleY(-1);          /* ★ 상하 반전 */
 }
 
-/* 슬롯 안의 내용(카드)은 다시 뒤집어서 정상 방향으로 보이게 */
-.slot {
-    width: 68px;
-    height: 68px;
-    border: 2px dashed #bdc3c7;
-    border-radius: 10px;
-    background: #fafafa;
-    position: relative;
-    transform: scaleY(-1);          /* ★ 다시 뒤집기 */
-}
-     column {
+.column {
     display: flex;
     flex-direction: column;
     gap: 10px;
     align-items: center;
 }
 
-/* 숫자를 맨 위에 배치 */
+/* 숫자를 위쪽에 */
 .score-box {
-    order: -1;              /* 위로 */
+    order: -1;
     text-align: center;
     width: 68px;
     margin-bottom: 4px;
@@ -348,7 +336,11 @@
         <div class="main-title">80년대생 부모에게 '거실 TV'는 어떤 의미인가?(가칭)</div>
         <div class="sub-desc">
 본 설문은 1980년대생 양육자의 거실TV에 대한 인식을 확인하는 설문입니다. 
-34개의 진술문을 읽고, 동의정도에 따라 아래 피라미드 칸에 옮기면 됩니다(피라미드 가로줄은 동의정도, 세로줄은 위아래 위치와 관계없이 동일한 동의정도임). 
+
+4개의 진술문을 읽고, 동의 정도에 따라 드래그하여 아래 피라미드 칸을 모두 채워주세요.
+*피라미드의 가로줄은 왼쪽으로 갈수록 덜 동의, 오른쪽으로 갈수록 더 동의함을 의미하며, 
+세로줄은 위아래 위치와 관계없이 동일한 동의정도를 뜻합니다.  
+
 본 설문은 정답이 없으므로, 사회적으로 바람직한 답변보다는 귀하의 솔직한 의견을 기록해 주시기를 부탁드립니다.
 
 답해주신 의견은 통계법 제33조에 따라 비밀이 보장되며, 연구 목적 외에는 절대 활용되지 않습니다. 
@@ -375,13 +367,17 @@
                 <button class="zoom-btn" id="zoom-in-btn">+</button>
             </div>
 
-            <div id="pyramid-zoom-wrapper">
-    <!-- ① 라벨을 위로 올림 -->
+          <div id="pyramid-zoom-wrapper">
+    <!-- 라벨을 위에 -->
     <div class="score-label-row">
         <span class="left">◀ 매우 비동의</span>
         <span class="center">중립</span>
         <span class="right">매우 동의 ▶</span>
     </div>
+
+    <!-- 그 아래에 피라미드 -->
+    <div class="board-container" id="board"></div>
+</div>
 
     <!-- ② 피라미드 보드 -->
     <div class="board-container" id="board"></div>
@@ -852,6 +848,7 @@ document.getElementById('prev-btn').addEventListener('click', () => {
 </script>
 </body>
 </html>
+
 
 
 
