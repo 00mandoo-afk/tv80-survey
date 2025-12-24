@@ -449,7 +449,9 @@
 </div>
 </div>
     <div class="footer">
-        <button id="finish-btn" disabled onclick="goFinalPage()">모든 문항을 배치해 주세요</button>
+      <button id="finish-btn" type="button" disabled onclick="goFinalPage()">
+  모든 문항을 배치해 주세요
+</button>
     </div>
 </div>
 
@@ -762,20 +764,24 @@ function goFinalPage() {
 
   // 화면 전환
   document.getElementById('survey-page').classList.remove('active');
-  document.getElementById('final-form-page').classList.add('active');
+  document.getElementById('survey-page').style.display = 'none';
 
-  window.scrollTo(0, 0);
+  const fp = document.getElementById('final-form-page');
+  fp.classList.add('active');
+  fp.style.display = 'block';
 }
 
 // 누락되었던 '이전 단계로 돌아가기' 함수 추가
 function backToFirst() {
-  // 작성 중이던 이유가 있다면 임시 저장
   document.querySelectorAll('.reason-input').forEach(input => {
     savedReasons[input.dataset.q] = input.value;
   });
 
   document.getElementById('final-form-page').classList.remove('active');
+  document.getElementById('final-form-page').style.display = 'none';   // ← 이 줄 추가
+
   document.getElementById('survey-page').classList.add('active');
+  document.getElementById('survey-page').style.display = 'block';      // ← 이 줄 추가
   window.scrollTo(0, 0);
 }
     function submitAll() {
@@ -914,6 +920,7 @@ document.getElementById('prev-btn').addEventListener('click', () => {
 </script>
 </body>
 </html>
+
 
 
 
