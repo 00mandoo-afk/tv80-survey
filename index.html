@@ -459,7 +459,7 @@
   <header>
     <div class="main-title">양극단 배치 이유 및 인적 사항</div>
   </header>
-  
+
   <div class="form-section">
     <h3>1. 양극단 배치 이유</h3>
     <div id="reason-container"></div>
@@ -467,56 +467,70 @@
 
   <div class="form-section">
     <h3>2. 인적 사항</h3>
-    <!-- 출생연도~가족구성 테이블 전체 -->
+    <table class="info-table">
+      <tr>
+        <td class="info-label">출생연도</td>
+        <td>
+          19 <input type="number" id="info-year"
+                    style="width:60px; padding:5px;" placeholder="85"> 년
+        </td>
+      </tr>
+      <tr>
+        <td class="info-label">성별</td>
+        <td class="radio-group">
+          <label><input type="radio" name="gender" value="여"> 여</label>
+          <label><input type="radio" name="gender" value="남"> 남</label>
+        </td>
+      </tr>
+      <tr>
+        <td class="info-label">직업</td>
+        <td class="radio-group">
+          <label><input type="radio" name="job" value="회사원"> 회사원</label>
+          <label><input type="radio" name="job" value="자영업"> 자영업</label><br>
+          <label><input type="radio" name="job" value="전업양육자"> 전업양육자</label>
+          <label><input type="radio" name="job" value="프리랜서"> 프리랜서</label><br>
+          <label><input type="radio" name="job" value="기타"> 기타</label>
+          <input type="text" id="info-job-etc"
+                 placeholder="기타 내용 입력"
+                 style="width:120px; border:1px solid #ddd; padding:5px;">
+        </td>
+      </tr>
+      <tr>
+        <td class="info-label">
+          휴대폰<br><small>(쿠폰 수령용)</small>
+        </td>
+        <td>
+          <input type="text" id="info-phone" class="info-input"
+                 placeholder="010-0000-0000">
+        </td>
+      </tr>
+      <tr>
+        <td class="info-label">
+          가족구성<br><small>(자녀나이 필수)</small>
+        </td>
+        <td>
+          <input type="text" id="info-family" class="info-input"
+                 placeholder="예) 조부모 1명, 부부와 자녀 2명(7세, 3세)">
+        </td>
+      </tr>
+    </table>
   </div>
-  
+
   <div class="footer">
-    <button onclick="backToFirst()" ...>이전 단계로 돌아가기</button><br>
-    <button onclick="submitAll()" ...>설문 최종 제출하기</button>
+    <button onclick="backToFirst()"
+            style="background:#888; color:white; padding:12px 20px;
+                   border-radius:30px; border:none; margin-bottom:10px;">
+      이전 단계로 돌아가기
+    </button><br>
+    <button onclick="submitAll()"
+            style="background:var(--primary-color); color:white; padding:18px;
+                   border-radius:40px; border:none; width:100%; max-width:400px;
+                   font-weight:bold;">
+      설문 최종 제출하기
+    </button>
   </div>
 </div>
 
-    <div class="form-section">
-        <h3>2. 인적 사항</h3>
-        <table class="info-table">
-            <tr>
-                <td class="info-label">출생연도</td>
-                <td>19 <input type="number" id="info-year" style="width:60px; padding:5px;" placeholder="85"> 년</td>
-            </tr>
-            <tr>
-                <td class="info-label">성별</td>
-                <td class="radio-group">
-                    <label><input type="radio" name="gender" value="여"> 여</label>
-                    <label><input type="radio" name="gender" value="남"> 남</label>
-                </td>
-            </tr>
-            <tr>
-                <td class="info-label">직업</td>
-                <td class="radio-group">
-                    <label><input type="radio" name="job" value="회사원"> 회사원</label>
-                    <label><input type="radio" name="job" value="자영업"> 자영업</label><br>
-                    <label><input type="radio" name="job" value="전업양육자"> 전업양육자</label>
-                    <label><input type="radio" name="job" value="프리랜서"> 프리랜서</label><br>
-                    <label><input type="radio" name="job" value="기타"> 기타</label>
-                    <input type="text" id="info-job-etc" placeholder="기타 내용 입력" style="width:120px; border:1px solid #ddd; padding:5px;">
-                </td>
-            </tr>
-            <tr>
-                <td class="info-label">휴대폰<br><small>(쿠폰 수령용)</small></td>
-                <td><input type="text" id="info-phone" class="info-input" placeholder="010-0000-0000"></td>
-            </tr>
-            <tr>
-                <td class="info-label">가족구성<br><small>(자녀나이 필수)</small></td>
-                <td><input type="text" id="info-family" class="info-input" placeholder="예) 조부모 1명, 부부와 자녀 2명(7세, 3세)"></td>
-            </tr>
-        </table>
-    </div>
-    
-    <div class="footer">
-        <button onclick="backToFirst()" style="background:#888; color:white; padding:12px 20px; border-radius:30px; border:none; margin-bottom:10px;">이전 단계로 돌아가기</button><br>
-        <button onclick="submitAll()" style="background:var(--primary-color); color:white; padding:18px; border-radius:40px; border:none; width:100%; max-width:400px; font-weight:bold;">설문 최종 제출하기</button>
-    </div>
-</div>
 
 <script>
     const questions = [
@@ -931,6 +945,7 @@ document.getElementById('prev-btn').addEventListener('click', () => {
 </script>
 </body>
 </html>
+
 
 
 
