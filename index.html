@@ -723,15 +723,13 @@ function makeDraggable(el) {
     }
 
     function goFinalPage() {
-        const placed = document.querySelectorAll('.slot.occupied').length;
-        if (placed !== 34) return;
-        showFinalForm();
-        document.getElementById('survey-page').classList.remove('active');
-        document.getElementById('survey-page').style.display = 'none';
-        document.getElementById('final-form-page').classList.add('active');
-        document.getElementById('final-form-page').style.display = 'block';
-        window.scrollTo(0,0);
-    }
+    const placed = document.querySelectorAll('.slot.occupied').length;
+    if (placed !== 34) return;
+    showFinalForm();
+    document.getElementById('survey-page').classList.remove('active');
+    document.getElementById('final-form-page').classList.add('active');
+    window.scrollTo(0,0);
+}
 
     function showFinalForm() {
         const container = document.getElementById('reason-container');
@@ -756,23 +754,21 @@ function makeDraggable(el) {
     }
 
     function backToFirst() {
-        Array.from(document.querySelectorAll('.reason-input')).forEach(input => {
-            savedReasons[input.dataset.q] = input.value;
-        });
-        savedPersonalInfo = {
-            year: document.getElementById('info-year').value,
-            gender: document.querySelector('input[name="gender"]:checked')?.value || "",
-            job: document.querySelector('input[name="job"]:checked')?.value || "",
-            jobEtc: document.getElementById('info-job-etc').value,
-            phone: document.getElementById('info-phone').value,
-            family: document.getElementById('info-family').value
-        };
-        document.getElementById('final-form-page').classList.remove('active');
-        document.getElementById('final-form-page').style.display = 'none';
-        document.getElementById('survey-page').classList.add('active');
-        document.getElementById('survey-page').style.display = 'block';
-        window.scrollTo(0,0);
-    }
+    Array.from(document.querySelectorAll('.reason-input')).forEach(input => {
+        savedReasons[input.dataset.q] = input.value;
+    });
+    savedPersonalInfo = {
+        year: document.getElementById('info-year').value,
+        gender: document.querySelector('input[name="gender"]:checked')?.value || "",
+        job: document.querySelector('input[name="job"]:checked')?.value || "",
+        jobEtc: document.getElementById('info-job-etc').value,
+        phone: document.getElementById('info-phone').value,
+        family: document.getElementById('info-family').value
+    };
+    document.getElementById('final-form-page').classList.remove('active');
+    document.getElementById('survey-page').classList.add('active');
+    window.scrollTo(0,0);
+}
 
     function submitAll() {
         Array.from(document.querySelectorAll('.reason-input')).forEach(input => {
@@ -910,6 +906,7 @@ document.getElementById('prev-btn').addEventListener('click', () => {
 </script>
 </body>
 </html>
+
 
 
 
