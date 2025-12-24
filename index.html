@@ -456,14 +456,25 @@
 </div>
 
 <div id="final-form-page">
-    <header>
-        <div class="main-title">양극단 배치 이유 및 인적 사항</div>
-    </header>
-    
-    <div class="form-section">
-        <h3>1. 양극단 배치 이유</h3>
-        <div id="reason-container"></div>
-    </div>
+  <header>
+    <div class="main-title">양극단 배치 이유 및 인적 사항</div>
+  </header>
+  
+  <div class="form-section">
+    <h3>1. 양극단 배치 이유</h3>
+    <div id="reason-container"></div>
+  </div>
+
+  <div class="form-section">
+    <h3>2. 인적 사항</h3>
+    <!-- 출생연도~가족구성 테이블 전체 -->
+  </div>
+  
+  <div class="footer">
+    <button onclick="backToFirst()" ...>이전 단계로 돌아가기</button><br>
+    <button onclick="submitAll()" ...>설문 최종 제출하기</button>
+  </div>
+</div>
 
     <div class="form-section">
         <h3>2. 인적 사항</h3>
@@ -920,6 +931,7 @@ document.getElementById('prev-btn').addEventListener('click', () => {
 </script>
 </body>
 </html>
+
 
 
 
