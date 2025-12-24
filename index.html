@@ -21,10 +21,19 @@
         }
         #survey-page, #final-form-page {
             display: none;
+        }
+        #survey-page.active {
+            display: block !important;
             padding-bottom: 50px;
         }
-        #survey-page.active, #final-form-page.active {
-            display: block;
+        #final-form-page.active {
+            display: block !important;
+            visibility: visible !important;
+            opacity: 1 !important;
+            position: relative !important;
+            width: 100% !important;
+            height: auto !important;
+            min-height: 100vh !important;
         }
 
         header {
@@ -723,29 +732,47 @@ function makeDraggable(el) {
     }
 
     function goFinalPage() {
-    const placed = document.querySelectorAll('.slot.occupied').length;
-    if (placed !== 34) return;
-    showFinalForm();
-    document.getElementById('survey-page').classList.remove('active');
-    document.getElementById('final-form-page').classList.add('active');
-    window.scrollTo(0,0);
-}
+        const placed = document.querySelectorAll('.slot.occupied').length;
+        if (placed !== 34) return;
+        
+        // 먼저 폼 내용 생성
+        showFinalForm();
+        
+        // 인적사항 복원
+        if (savedPersonalInfo.year) document.getElementById('info-year').value = savedPersonalInfo.year;
+        if (savedPersonalInfo.gender) {
+            const genderRadio = document.querySelector(`input[name="gender"][value="${savedPersonalInfo.gender}"]`);
+            if (genderRadio) genderRadio.checked = true;
+        }
+        if (savedPersonalInfo.job) {
+            const jobRadio = document.querySelector(`input[name="job"][value="${savedPersonalInfo.job}"]`);
+            if (jobRadio) jobRadio.checked = true;
+        }
+        if (savedPersonalInfo.jobEtc) document.getElementById('info-job-etc').value = savedPersonalInfo.jobEtc;
+        if (savedPersonalInfo.phone) document.getElementById('info-phone').value = savedPersonalInfo.phone;
+        if (savedPersonalInfo.family) document.getElementById('info-family').value = savedPersonalInfo.family;
+        
+        // 페이지 전환
+        document.getElementById('survey-page').classList.remove('active');
+        document.getElementById('final-form-page').classList.add('active');
+        window.scrollTo(0,0);
+    }
 
     function showFinalForm() {
         const container = document.getElementById('reason-container');
+        container.innerHTML = ''; // 초기화
+        
         const mapping = {"-4": "매우 비동의", "4": "매우 동의"};
         Object.keys(mapping).forEach(score => {
             document.querySelectorAll(`.column[data-score="${score}"] .q-card`).forEach(card => {
-                let div = container.querySelector(`.reason-box[data-q="${card.textContent}"]`);
-                if (!div) {
-                    div = document.createElement('div');
-                    div.className = "reason-box";
-                    div.dataset.q = card.textContent;
-                    div.innerHTML =
-                        `<div style="font-weight:bold; ${score === "4" ? "color: var(--agree-color);" : "color: var(--disagree-color);"};">[${mapping[score]}] ${card.textContent}</div>
-                         <textarea class="reason-input" data-q="${card.textContent}" placeholder="이유를 입력해 주세요."></textarea>`;
-                    container.appendChild(div);
-                }
+                const div = document.createElement('div');
+                div.className = "reason-box";
+                div.dataset.q = card.textContent;
+                div.innerHTML =
+                    `<div style="font-weight:bold; ${score === "4" ? "color: var(--agree-color);" : "color: var(--disagree-color);"};">[${mapping[score]}] ${card.textContent}</div>
+                     <textarea class="reason-input" data-q="${card.textContent}" placeholder="이유를 입력해 주세요."></textarea>`;
+                container.appendChild(div);
+                
                 if (savedReasons[card.textContent]) {
                     div.querySelector('textarea').value = savedReasons[card.textContent];
                 }
@@ -754,21 +781,21 @@ function makeDraggable(el) {
     }
 
     function backToFirst() {
-    Array.from(document.querySelectorAll('.reason-input')).forEach(input => {
-        savedReasons[input.dataset.q] = input.value;
-    });
-    savedPersonalInfo = {
-        year: document.getElementById('info-year').value,
-        gender: document.querySelector('input[name="gender"]:checked')?.value || "",
-        job: document.querySelector('input[name="job"]:checked')?.value || "",
-        jobEtc: document.getElementById('info-job-etc').value,
-        phone: document.getElementById('info-phone').value,
-        family: document.getElementById('info-family').value
-    };
-    document.getElementById('final-form-page').classList.remove('active');
-    document.getElementById('survey-page').classList.add('active');
-    window.scrollTo(0,0);
-}
+        Array.from(document.querySelectorAll('.reason-input')).forEach(input => {
+            savedReasons[input.dataset.q] = input.value;
+        });
+        savedPersonalInfo = {
+            year: document.getElementById('info-year').value,
+            gender: document.querySelector('input[name="gender"]:checked')?.value || "",
+            job: document.querySelector('input[name="job"]:checked')?.value || "",
+            jobEtc: document.getElementById('info-job-etc').value,
+            phone: document.getElementById('info-phone').value,
+            family: document.getElementById('info-family').value
+        };
+        document.getElementById('final-form-page').classList.remove('active');
+        document.getElementById('survey-page').classList.add('active');
+        window.scrollTo(0,0);
+    }
 
     function submitAll() {
         Array.from(document.querySelectorAll('.reason-input')).forEach(input => {
@@ -902,23 +929,13 @@ document.getElementById('prev-btn').addEventListener('click', () => {
 }
 
     // 초기화
+    // final-form-page가 survey-page 안에 들어가지 않도록 강제로 body로 이동
+    const finalPage = document.getElementById('final-form-page');
+    if (finalPage && finalPage.parentElement.id === 'survey-page') {
+        document.body.appendChild(finalPage);
+    }
+    
     showCurrentCard();
 </script>
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
