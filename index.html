@@ -209,6 +209,57 @@
         .score-label-row .left { color:var(--disagree-color); }
         .score-label-row .center { color:#7f8c8d; }
         .score-label-row .right { color:var(--agree-color); }
+.arrow-scale {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.arrow-scale .label {
+    font-size: 0.8rem;
+    font-weight: 700;
+    white-space: nowrap;
+}
+.arrow-scale .label.left  { color: var(--disagree-color); }
+.arrow-scale .label.right { color: var(--agree-color); }
+
+.arrow-bar {
+    position: relative;
+    width: 260px;
+    height: 18px;
+    border-radius: 9px;
+    background: linear-gradient(90deg, #e74c3c, #3498db, #27ae60);
+}
+
+/* 화살표 모양(양끝 삼각형) */
+.arrow-bar::before,
+.arrow-bar::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    border-top: 9px solid transparent;
+    border-bottom: 9px solid transparent;
+}
+.arrow-bar::before {
+    left: -14px;
+    border-right: 14px solid #e74c3c;
+}
+.arrow-bar::after {
+    right: -14px;
+    border-left: 14px solid #27ae60;
+}
+
+/* 중립 라벨 */
+.arrow-middle {
+    text-align: center;
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: #7f8c8d;
+    margin-top: 4px;
+}
 
         .form-section {
             background: white;
@@ -316,6 +367,11 @@
         }
         .nav-btn.left  { background:#bdc3c7; }
         .nav-btn.right { background:var(--accent-color); }
+  .pyramid-guide-strong {
+    color: var(--accent-color);   /* 파란색 */
+    font-size: 0.8rem;
+    line-height: 1.4;
+}
     </style>
 </head>
 <body>
@@ -341,11 +397,10 @@
 
 34개의 진술문을 읽고, 동의 정도에 따라 드래그하여 아래 피라미드 칸을 모두 채워주세요.
 
-<p class="pyramid-guide">
-    피라미드의 <b>가로줄</b>은 왼쪽으로 갈수록 <b>덜 동의</b>, 오른쪽으로 갈수록 <b>더 동의</b>함을 의미하며,<br>
-    <b>세로줄</b>은 위아래 위치와 관계없이 <b>동일한 동의 정도</b>를 뜻합니다.
-</p>
-
+<span class="pyramid-guide-strong">
+    피라미드의 가로줄은 왼쪽으로 갈수록 덜 동의, 오른쪽으로 갈수록 더 동의함을 의미하며,<br>
+    세로줄은 위아래 위치와 관계없이 동일한 동의 정도를 뜻합니다.
+</span>
 본 설문은 정답이 없으므로, 사회적으로 바람직한 답변보다는 귀하의 솔직한 의견을 기록해 주시기를 부탁드립니다.
 
 답해주신 의견은 통계법 제33조에 따라 비밀이 보장되며, 연구 목적 외에는 절대 활용되지 않습니다. 
@@ -372,18 +427,18 @@
                 <button class="zoom-btn" id="zoom-in-btn">+</button>
             </div>
 
-          <div id="pyramid-zoom-wrapper">
-    <!-- 라벨을 위에 -->
-    <div class="score-label-row">
-        <span class="left">◀ 매우 비동의</span>
-        <span class="center">중립</span>
-        <span class="right">매우 동의 ▶</span>
+         <div id="pyramid-zoom-wrapper">
+    <!-- 그라데이션 화살표 + 라벨 -->
+    <div class="arrow-scale">
+        <span class="label left">매우 비동의</span>
+        <div class="arrow-bar"></div>
+        <span class="label right">매우 동의</span>
     </div>
+    <div class="arrow-middle">중립</div>
 
-    <!-- 그 아래에 피라미드 -->
+    <!-- 피라미드 보드 -->
     <div class="board-container" id="board"></div>
 </div>
-
 </div>
     <div class="footer">
         <button id="finish-btn" disabled onclick="goFinalPage()">모든 문항을 배치해 주세요</button>
@@ -851,6 +906,7 @@ document.getElementById('prev-btn').addEventListener('click', () => {
 </script>
 </body>
 </html>
+
 
 
 
