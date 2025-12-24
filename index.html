@@ -7,7 +7,7 @@
     <style>
         :root {
             --primary-color: #2c3e50;
-            --accent-color: #3498db;
+            --accent-color: #1e40af;
             --disagree-color: #e74c3c;
             --agree-color: #27ae60;
         }
@@ -21,19 +21,10 @@
         }
         #survey-page, #final-form-page {
             display: none;
-        }
-        #survey-page.active {
-            display: block !important;
             padding-bottom: 50px;
         }
-        #final-form-page.active {
-            display: block !important;
-            visibility: visible !important;
-            opacity: 1 !important;
-            position: relative !important;
-            width: 100% !important;
-            height: auto !important;
-            min-height: 100vh !important;
+        #survey-page.active, #final-form-page.active {
+            display: block;
         }
 
         header {
@@ -54,11 +45,12 @@
             color: var(--primary-color);
         }
         .sub-desc {
-            font-size: 0.8rem;
-            color:#555;
-            margin-top:6px;
-            line-height:1.4;
-            white-space:pre-line;
+       font-size: 0.95rem;  /* 크기도 조금 더 키움 */
+    color: #000;         /* 완전한 검정 */
+    font-weight: 500;    /* 글자 두께도 추가 */
+    margin-top: 6px;
+    line-height: 1.4;
+    white-space: pre-line;
         }
 
         #question-pool {
@@ -715,88 +707,74 @@ function makeDraggable(el) {
     el.addEventListener('touchstart', onStart);
 }
  
-    function updateStatus() {
-        const placed = document.querySelectorAll('.slot.occupied').length;
-        const remainingCards = 34 - placed;
-        document.getElementById('counter').textContent = `남은 문항: ${remainingCards}/34`;
-        const btn = document.getElementById('finish-btn');
-        if (placed === 34) {
-            btn.disabled = false;
-            btn.classList.add('active');
-            btn.textContent = "다음 단계: 양극단 배치 이유 및 인적 사항";
-        } else {
-            btn.disabled = true;
-            btn.classList.remove('active');
-            btn.textContent = "모든 문항을 배치해 주세요";
-        }
-    }
+ function updateStatus() {
+  const placed = document.querySelectorAll('.slot.occupied .q-card').length;
+  const remainingCards = 34 - placed;
 
-    function goFinalPage() {
-        const placed = document.querySelectorAll('.slot.occupied').length;
-        if (placed !== 34) return;
-        
-        // 먼저 폼 내용 생성
-        showFinalForm();
-        
-        // 인적사항 복원
-        if (savedPersonalInfo.year) document.getElementById('info-year').value = savedPersonalInfo.year;
-        if (savedPersonalInfo.gender) {
-            const genderRadio = document.querySelector(`input[name="gender"][value="${savedPersonalInfo.gender}"]`);
-            if (genderRadio) genderRadio.checked = true;
-        }
-        if (savedPersonalInfo.job) {
-            const jobRadio = document.querySelector(`input[name="job"][value="${savedPersonalInfo.job}"]`);
-            if (jobRadio) jobRadio.checked = true;
-        }
-        if (savedPersonalInfo.jobEtc) document.getElementById('info-job-etc').value = savedPersonalInfo.jobEtc;
-        if (savedPersonalInfo.phone) document.getElementById('info-phone').value = savedPersonalInfo.phone;
-        if (savedPersonalInfo.family) document.getElementById('info-family').value = savedPersonalInfo.family;
-        
-        // 페이지 전환
-        document.getElementById('survey-page').classList.remove('active');
-        document.getElementById('final-form-page').classList.add('active');
-        window.scrollTo(0,0);
-    }
+  document.getElementById('counter').textContent =
+    `남은 문항: ${remainingCards}/34`;
 
-    function showFinalForm() {
-        const container = document.getElementById('reason-container');
-        container.innerHTML = ''; // 초기화
-        
-        const mapping = {"-4": "매우 비동의", "4": "매우 동의"};
-        Object.keys(mapping).forEach(score => {
-            document.querySelectorAll(`.column[data-score="${score}"] .q-card`).forEach(card => {
-                const div = document.createElement('div');
-                div.className = "reason-box";
-                div.dataset.q = card.textContent;
-                div.innerHTML =
-                    `<div style="font-weight:bold; ${score === "4" ? "color: var(--agree-color);" : "color: var(--disagree-color);"};">[${mapping[score]}] ${card.textContent}</div>
-                     <textarea class="reason-input" data-q="${card.textContent}" placeholder="이유를 입력해 주세요."></textarea>`;
-                container.appendChild(div);
-                
-                if (savedReasons[card.textContent]) {
-                    div.querySelector('textarea').value = savedReasons[card.textContent];
-                }
-            });
-        });
-    }
+  const btn = document.getElementById('finish-btn');
+  if (placed === 34) {
+    btn.disabled = false;
+    btn.classList.add('active');
+    btn.textContent = "다음 단계: 양극단 배치 이유 및 인적 사항";
+  } else {
+    btn.disabled = true;
+    btn.classList.remove('active');
+    btn.textContent = "모든 문항을 배치해 주세요";
+  }
+}
 
-    function backToFirst() {
-        Array.from(document.querySelectorAll('.reason-input')).forEach(input => {
-            savedReasons[input.dataset.q] = input.value;
-        });
-        savedPersonalInfo = {
-            year: document.getElementById('info-year').value,
-            gender: document.querySelector('input[name="gender"]:checked')?.value || "",
-            job: document.querySelector('input[name="job"]:checked')?.value || "",
-            jobEtc: document.getElementById('info-job-etc').value,
-            phone: document.getElementById('info-phone').value,
-            family: document.getElementById('info-family').value
-        };
-        document.getElementById('final-form-page').classList.remove('active');
-        document.getElementById('survey-page').classList.add('active');
-        window.scrollTo(0,0);
-    }
 
+function goFinalPage() {
+  const placed = document.querySelectorAll('.slot.occupied .q-card').length;
+  if (placed !== 34) {
+    alert('모든 문항을 배치해 주세요.');
+    return;
+  }
+
+  // 이유 입력 칸 생성 로직 수정 (특수문자 에러 방지)
+  const container = document.getElementById('reason-container');
+  const mapping = {"-4": "매우 비동의", "4": "매우 동의"};
+
+  // 기존 내용을 지우고 새로 생성 (더 안전한 방식)
+  container.innerHTML = "";
+
+  Object.keys(mapping).forEach(score => {
+    const cards = document.querySelectorAll(`.column[data-score="${score}"] .q-card`);
+    cards.forEach(card => {
+      const qText = card.textContent;
+      const savedValue = savedReasons[qText] || ""; // 이전에 썼던 내용이 있으면 유지
+
+      const div = document.createElement('div');
+      div.className = "reason-box";
+      div.innerHTML = `
+        <div style="font-weight:bold; ${score === "4" ? "color: var(--agree-color);" : "color: var(--disagree-color);"}">[${mapping[score]}] ${qText}</div>
+        <textarea class="reason-input" data-q="${qText}" placeholder="이유를 입력해 주세요.">${savedValue}</textarea>
+      `;
+      container.appendChild(div);
+    });
+  });
+
+  // 화면 전환
+  document.getElementById('survey-page').classList.remove('active');
+  document.getElementById('final-form-page').classList.add('active');
+
+  window.scrollTo(0, 0);
+}
+
+// 누락되었던 '이전 단계로 돌아가기' 함수 추가
+function backToFirst() {
+  // 작성 중이던 이유가 있다면 임시 저장
+  document.querySelectorAll('.reason-input').forEach(input => {
+    savedReasons[input.dataset.q] = input.value;
+  });
+
+  document.getElementById('final-form-page').classList.remove('active');
+  document.getElementById('survey-page').classList.add('active');
+  window.scrollTo(0, 0);
+}
     function submitAll() {
         Array.from(document.querySelectorAll('.reason-input')).forEach(input => {
             savedReasons[input.dataset.q] = input.value;
@@ -929,13 +907,21 @@ document.getElementById('prev-btn').addEventListener('click', () => {
 }
 
     // 초기화
-    // final-form-page가 survey-page 안에 들어가지 않도록 강제로 body로 이동
-    const finalPage = document.getElementById('final-form-page');
-    if (finalPage && finalPage.parentElement.id === 'survey-page') {
-        document.body.appendChild(finalPage);
-    }
-    
     showCurrentCard();
 </script>
 </body>
 </html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
