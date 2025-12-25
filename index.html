@@ -781,25 +781,28 @@
     const mapping = {"-4": "매우 비동의", "4": "매우 동의"};
     container.innerHTML = "";
 
-    Object.keys(mapping).forEach(score => {
-      const cards = document.querySelectorAll(`.column[data-score="${score}"] .q-card`);
-      cards.forEach(card => {
-        const qText = card.textContent;
-        const savedValue = savedReasons[qText] || "";
-        const div = document.createElement('div');
-        div.className = "reason-box";
-        div.innerHTML = `
-          <div style="font-weight:bold; ${score === "4"
-              ? "color: var(--agree-color);"
-              : "color: var(--disagree-color);"}">
-            [${mapping[score]}] ${qText}
-          </div>
-          <textarea class="reason-input" data-q="${qText}"
-                    placeholder="이유를 입력해 주세요.">${savedValue}</textarea>
-        `;
-        container.appendChild(div);
-      });
-    });
+   Object.keys(mapping).forEach(score => {
+  const cards = document.querySelectorAll(`.column[data-score="${score}"] .q-card`);
+  cards.forEach(card => {
+    const qText = card.textContent;
+    const savedValue = savedReasons[qText] || "";
+    const div = document.createElement('div');
+    div.className = "reason-box";
+    
+    // 이 부분에서 색상 적용 범위를 분리합니다.
+    const colorStyle = score === "4" ? "color: var(--agree-color);" : "color: var(--disagree-color);";
+    
+    div.innerHTML = `
+      <div style="font-weight:bold; margin-bottom: 8px;">
+        <span style="${colorStyle}">[${mapping[score]}]</span>
+        <span style="color: #000;"> ${qText}</span>
+      </div>
+      <textarea class="reason-input" data-q="${qText}"
+                placeholder="이유를 입력해 주세요.">${savedValue}</textarea>
+    `;
+    container.appendChild(div);
+  });
+});
 
     const sp = document.getElementById('survey-page');
     const fp = document.getElementById('final-form-page');
@@ -961,6 +964,7 @@
 </script>
 </body>
 </html>
+
 
 
 
