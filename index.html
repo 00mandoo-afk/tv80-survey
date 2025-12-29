@@ -355,16 +355,10 @@
         #finish-btn.active { background: var(--agree-color); }
 
 #done-screen {
-    display: none;
-    padding: 80px 20px;
-    text-align: center;
-    font-size: 1.1rem;
-    background: white;
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
+    display:none;
+    padding:80px 20px;
+    text-align:center;
+    font-size:1.1rem;
 }
         .nav-btn {
             width: 70px;
@@ -386,33 +380,6 @@
     </style>
 </head>
 <body>
-<script>
-    (function() {
-        if (localStorage.getItem('survey_done_tv80') === 'true') {
-            document.getElementById('done-screen').style.display = 'block';
-            document.getElementById('survey-page').style.display = 'none';
-            document.getElementById('final-form-page').style.display = 'none';
-            return;
-        }
-
-        const sessionKey = 'survey_session_tv80';
-        if (sessionStorage.getItem(sessionKey) === 'started') {
-            document.getElementById('done-screen').innerHTML = 
-                '이미 설문에 참여 중이거나 완료하셨습니다. 참여해 주셔서 감사합니다!';
-            document.getElementById('done-screen').style.display = 'block';
-            document.getElementById('survey-page').style.display = 'none';
-            document.getElementById('final-form-page').style.display = 'none';
-            return;
-        }
-        sessionStorage.setItem(sessionKey, 'started');
-
-        let deviceId = localStorage.getItem('survey_device_tv80');
-        if (!deviceId) {
-            deviceId = 'device_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
-            localStorage.setItem('survey_device_tv80', deviceId);
-        }
-    })();
-</script>
 <div id="done-screen" style="display:none;">
     <div style="font-size:1.3rem; margin-bottom:20px; color:var(--primary-color);">
         설문 참여가 완료되었습니다.
@@ -813,13 +780,7 @@ function backToFirst() {
   document.getElementById('survey-page').classList.add('active');
   window.scrollTo(0, 0);
 }
-    function submitAll() {
-    // 중복 제출 방지
-    if (document.getElementById('google-submit-form').hasAttribute('submitted')) {
-        alert('이미 제출되었습니다.');
-        return;
-    }
-
+ function submitAll() {
     // 데이터 수집
     Array.from(document.querySelectorAll('.reason-input')).forEach(input => {
         savedReasons[input.dataset.q] = input.value;
@@ -834,7 +795,6 @@ function backToFirst() {
         family: document.getElementById('info-family').value
     };
 
-    // 배치 데이터
     let sortData = "";
     document.querySelectorAll('.slot.occupied .q-card').forEach(c => {
         sortData += `${c.textContent.split('.')[0]}:${c.parentElement.parentElement.dataset.score}, `;
@@ -846,30 +806,19 @@ function backToFirst() {
         `연락처:${document.getElementById('info-phone').value} / ` +
         `가족:${document.getElementById('info-family').value}`;
 
-    // Google Form 제출
     document.getElementById('g-entry-1').value = sortData;
     document.getElementById('g-entry-2').value =
         Array.from(document.querySelectorAll('.reason-input'))
              .map(i => `${i.dataset.q}:${i.value}`).join('\n');
     document.getElementById('g-entry-3').value = personalInfo;
     
-    document.getElementById('google-submit-form').setAttribute('submitted', 'true');
     document.getElementById('google-submit-form').submit();
-
-    // ✅ 강력한 완료 처리
-    const deviceId = localStorage.getItem('survey_device_tv80');
-    localStorage.setItem('survey_done_tv80', 'true');
-    localStorage.setItem(`survey_done_${deviceId}`, 'true'); // 기기별 추가 블록
-    
-    sessionStorage.clear(); // 세션도 완전 초기화
 
     setTimeout(() => {
         alert("성공적으로 제출되었습니다. 감사합니다!");
-        document.getElementById('done-screen').style.display = 'block';
-        document.getElementById('survey-page').style.display = 'none';
-        document.getElementById('final-form-page').style.display = 'none';
+        setTimeout(() => location.reload(), 1500);
     }, 1000);
-}
+}  // ← 이 괄호 추가!
 
 document.getElementById('next-btn').addEventListener('click', () => {
     // 아직 배치 안 된 문항이 없으면 아무 것도 안 함
@@ -969,6 +918,7 @@ document.getElementById('prev-btn').addEventListener('click', () => {
 </script>
 </body>
 </html>
+
 
 
 
