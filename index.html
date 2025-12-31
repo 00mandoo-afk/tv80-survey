@@ -1,74 +1,89 @@
-<script>
-// ★★★ 설문 완료 - 모든 접근 차단 ★★★
-(function() {
-  document.title = '설문 마감';
-  document.body.innerHTML = `
-    <div style="
-      text-align: center; 
-      padding: 100px 20px; 
-      font-family: 'Pretendard', sans-serif;
-      background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>설문조사 마감</title>
+  <style>
+    body { 
+      margin: 0; padding: 0; 
+      font-family: 'Pretendard', -apple-system, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
       min-height: 100vh;
       display: flex;
       flex-direction: column;
       justify-content: center;
       align-items: center;
-    ">
-      <div style="font-size: 2rem; color: #27ae60; margin-bottom: 20px; font-weight: 900;">
-        ✅ 설문조사 완료
-      </div>
-      <div style="font-size: 1.3rem; color: #2c3e50; margin-bottom: 40px; line-height: 1.6;">
-        80년대생 부모님께서 참여해주신<br>
-        <strong>'거실 TV' 인식 조사</strong><br>
-        <span style="color: #666; font-size: 1.1rem;">마무리 되었습니다.</span>
-      </div>
-      <div style="
-        background: white;
-        padding: 25px 40px;
-        border-radius: 20px;
-        box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-        margin-bottom: 30px;
-        font-size: 1.1rem;
-        color: #2c3e50;
-      ">
-        💌 <strong>1만 원 상당 스타벅스 기프티콘</strong><br>
-        2026년 1월 연락처로 발송됩니다.
-      </div>
-      <button onclick="window.close()" 
-        style="
-          padding: 18px 40px;
-          background: #2c3e50;
-          color: white;
-          border: none;
-          border-radius: 30px;
-          font-size: 1.2rem;
-          font-weight: 600;
-          cursor: pointer;
-          box-shadow: 0 8px 20px rgba(44,62,80,0.3);
-          transition: all 0.2s;
-        "
-        onmouseover="this.style.background='#34495e'; this.style.transform='translateY(-2px)';"
-        onmouseout="this.style.background='#2c3e50'; this.style.transform='translateY(0)';"
-      >
-        창 닫기
-      </button>
-      <p style="font-size: 0.9rem; color: #7f8c8d; margin-top: 30px;">
-        연구책임자: 강승화 (00mandoo@naver.com)
-      </p>
-    </div>
-  `;
-  
-  // ESC키, F5, 뒤로가기 등 모든 조작 차단
-  document.addEventListener('keydown', function(e) {
-    if (e.key === 'Escape' || e.key === 'F5' || (e.ctrlKey && e.key === 'r')) {
-      e.preventDefault();
+      text-align: center;
+      color: white;
     }
-  });
+    .container {
+      background: rgba(255,255,255,0.15);
+      backdrop-filter: blur(10px);
+      border-radius: 25px;
+      padding: 60px 40px;
+      max-width: 500px;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+      border: 1px solid rgba(255,255,255,0.2);
+    }
+    h1 { font-size: 2.2rem; margin: 0 0 20px 0; font-weight: 900; }
+    p { font-size: 1.2rem; margin: 0 0 25px 0; line-height: 1.6; }
+    .gift { 
+      background: rgba(255,255,255,0.2); 
+      padding: 20px 30px; 
+      border-radius: 15px; 
+      margin: 30px 0; 
+      font-size: 1.3rem;
+      font-weight: 700;
+    }
+    .close-btn {
+      padding: 20px 50px;
+      background: #ff6b6b;
+      color: white;
+      border: none;
+      border-radius: 50px;
+      font-size: 1.3rem;
+      font-weight: 700;
+      cursor: pointer;
+      box-shadow: 0 10px 30px rgba(255,107,107,0.4);
+      transition: all 0.3s;
+    }
+    .close-btn:hover {
+      background: #ff5252;
+      transform: translateY(-3px);
+      box-shadow: 0 15px 40px rgba(255,107,107,0.5);
+    }
+    .contact { font-size: 1rem; opacity: 0.9; margin-top: 30px; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>🎉 설문조사 완료!</h1>
+    <p><strong>'80년대생 부모에게 거실 TV는 어떤 의미인가?'</strong><br>조사가 마무리되었습니다.</p>
+    <div class="gift">
+      💝 <strong>기프티콘은</strong><br>
+      2026년 1월 연락처로 발송됩니다!
+    </div>
+    <button class="close-btn" onclick="window.close();">
+      창 닫기
+    </button>
+    <div class="contact">
+      📞 연구책임자: 강승화<br>
+      00mandoo@naver.com
+    </div>
+  </div>
   
-  // 뒤로가기 방지
-  window.addEventListener('beforeunload', function(e) {
-    e.preventDefault();
-    return '설문이 완료되었습니다.';
-  });
-})();
-</script>
+  <script>
+    // 모든 조작 차단
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Escape' || e.key === 'F5' || 
+          (e.ctrlKey && e.key === 'r') || 
+          (e.ctrlKey && e.key === 'n')) {
+        e.preventDefault();
+      }
+    });
+    window.addEventListener('beforeunload', e => e.preventDefault());
+    document.addEventListener('contextmenu', e => e.preventDefault());
+  </script>
+</body>
+</html>
